@@ -8,10 +8,10 @@ class MainWindow(Tk):
         super(MainWindow, self).__init__()
         self.geometry("666x420+400+150")
         self.title("DI (Dungeon Initiative)")
-        self.iconbitmap('Wanted_Posters/scroll.ico')
+        self.iconbitmap('Images/Icon.ico')
         self.resizable(False, False)
 
-        self.launcher_image = ImageTk.PhotoImage(Image.open("Wanted_Posters/launcher.jpg"))
+        self.launcher_image = ImageTk.PhotoImage(Image.open("Images/Main.jpg"))
         self.launcher_label = Label(image=self.launcher_image)
         self.launcher_label.place(relwidth=1, relheight=1)
 
@@ -33,10 +33,10 @@ class Campaign(Toplevel):
         super(Campaign, self).__init__()
         self.geometry(f"666x333+{launcher.winfo_x()}+{launcher.winfo_y()}")
         self.title("Battle Settings")
-        self.iconbitmap('Wanted_Posters/scroll.ico')
+        self.iconbitmap('Images/Icon.ico')
         self.resizable(False, False)
 
-        self.encounter_image = ImageTk.PhotoImage(Image.open("Wanted_Posters/combat.jpg"))
+        self.encounter_image = ImageTk.PhotoImage(Image.open("Images/Campaign.jpg"))
         self.encounter_label = Label(self, image=self.encounter_image)
         self.encounter_label.place(relwidth=1, relheight=1)
 
