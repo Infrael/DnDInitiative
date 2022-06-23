@@ -3,7 +3,6 @@ from tkinter import messagebox, ttk
 from PIL import ImageTk, Image
 
 
-
 class Launcher(Tk):
     def __init__(self):
         super(Launcher, self).__init__()
@@ -17,7 +16,7 @@ class Launcher(Tk):
         self.launcher_label.place(relwidth=1, relheight=1)
 
         """ Main App Buttons """
-        self.battle_button = ttk.Button(text="New Encounter", command=battle_configuration)
+        self.battle_button = ttk.Button(text="Campaign", command=battle_configuration)
         self.battle_button.place(x=520, y=310, width=95)
         self.battle_button.focus_set()
 
@@ -30,28 +29,8 @@ class Launcher(Tk):
 
 
 def battle_configuration():
-    global battle_window
-    try:
-        if battle_window.winfo_exists() == 1:
-            messagebox.showerror("Hmm", "Initiate or Resolve the open conflict first! <3")
-            launcher.iconify()
-            battle_window.focus_set()
-        else:
-            battle_window = BattleConfiguration()
-            launcher.iconify()
-            battle_window.focus_set()
-    except NameError:
-        battle_window = BattleConfiguration()
-        launcher.iconify()
-        battle_window.focus_set()
+    pass
 
 
 def delicious_goblin():
-    global tavern
-    try:
-        if tavern.options.winfo_exists() == 1:
-            tavern.options.focus_set()
-        else:
-            tavern = Tavern()
-    except NameError:
-        tavern = Tavern()
+    pass
