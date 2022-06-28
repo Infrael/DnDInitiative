@@ -2,8 +2,12 @@ import AppGUI
 import Database
 
 
-active_campaign = Database.load_data()
+try:
+    current_campaign = Database.get_data("current_campaign")
+except FileNotFoundError:
+    current_campaign = False
+
 
 if __name__ == "__main__":
-    launcher = AppGUI.MainWindow(active_campaign)
+    launcher = AppGUI.MainWindow(current_campaign)
     launcher.mainloop()
