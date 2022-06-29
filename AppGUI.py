@@ -1,11 +1,12 @@
 import tkinter as ttk
 import Settings
 import Adventure
+import Database
 from PIL import ImageTk, Image
 
 
 class MainWindow(ttk.Tk):
-    def __init__(self, current_campaign):
+    def __init__(self):
         super(MainWindow, self).__init__()
         self.geometry("666x420+400+150")
         self.title("DI (Dungeon Initiative)")
@@ -23,9 +24,12 @@ class MainWindow(ttk.Tk):
         self.tavern_button = ttk.Button(text="Tavern", command=self.launch_settings_window)
         self.tavern_button.place(x=520, y=370, width=95)
 
-        self.active_campaign = current_campaign.get("campaign")
+        try:
+            self.current_campaign = Database.get_data("current_campaign")
+        except FileNotFoundError:
+            self.current_campaign = False
 
-        if not self.active_campaign:
+        if not self.current_campaign:
             self.campaign_button["state"] = "disabled"
             self.tavern_button.focus_set()
         else:
@@ -55,6 +59,3 @@ class MainWindow(ttk.Tk):
                 tavern_window = Settings.Tavern(self.winfo_x(), self.winfo_y())
         except NameError:
             tavern_window = Settings.Tavern(self.winfo_x(), self.winfo_y())
-
-    def update_current_campaign(self, new_campaign):
-        self.active_campaign = new_campaign

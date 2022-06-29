@@ -10,7 +10,7 @@ class Tavern(ttk.Toplevel):
         self.title("Delicious Goblin")
         self.iconbitmap('Images/Icon.ico')
         self.resizable(False, False)
-        self.master
+
         self.campaign_image = ImageTk.PhotoImage(Image.open("Images/Settings.jpg"))
         self.campaign_label = ttk.Label(self, image=self.campaign_image)
         self.campaign_label.place(relwidth=1, relheight=1)
@@ -24,6 +24,7 @@ class Tavern(ttk.Toplevel):
 
     def browse_for_file(self):
         file_location = askopenfilename()[:-7]
+        self.focus_set()
         self.file_browser.delete(0, 'end')
         self.file_browser.insert(ttk.END, file_location)
-        self.focus_set()
+
