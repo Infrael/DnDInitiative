@@ -6,8 +6,6 @@ from PIL import ImageTk, Image
 
 class MainWindow(ttk.Tk):
     def __init__(self, current_campaign):
-        self.active_campaign = current_campaign.get("campaign")
-
         super(MainWindow, self).__init__()
         self.geometry("666x420+400+150")
         self.title("DI (Dungeon Initiative)")
@@ -19,11 +17,13 @@ class MainWindow(ttk.Tk):
         self.main_label.place(relwidth=1, relheight=1)
 
         """ Main App Buttons """
-        self.campaign_button = ttk.Button(text="Campaign", command=self.start_campaign)
+        self.campaign_button = ttk.Button(text="Campaign", command=self.launch_campaign_window)
         self.campaign_button.place(x=520, y=340, width=95)
 
-        self.tavern_button = ttk.Button(text="Tavern", command=self.tavern)
+        self.tavern_button = ttk.Button(text="Tavern", command=self.launch_settings_window)
         self.tavern_button.place(x=520, y=370, width=95)
+
+        self.active_campaign = current_campaign.get("campaign")
 
         if not self.active_campaign:
             self.campaign_button["state"] = "disabled"
@@ -36,7 +36,7 @@ class MainWindow(ttk.Tk):
         # self.test_button = ttk.Button(text="Developer", command=self.test_button)
         # self.test_button.place(x=560, y=15, width=95)
 
-    def start_campaign(self):
+    def launch_campaign_window(self):
         global campaign_window
         try:
             if campaign_window.winfo_exists() == 1:
@@ -46,7 +46,7 @@ class MainWindow(ttk.Tk):
         except NameError:
             campaign_window = Adventure.Campaign(self.winfo_x(), self.winfo_y())
 
-    def tavern(self):
+    def launch_settings_window(self):
         global tavern_window
         try:
             if tavern_window.winfo_exists() == 1:
@@ -55,3 +55,6 @@ class MainWindow(ttk.Tk):
                 tavern_window = Settings.Tavern(self.winfo_x(), self.winfo_y())
         except NameError:
             tavern_window = Settings.Tavern(self.winfo_x(), self.winfo_y())
+
+    def update_current_campaign(self, new_campaign):
+        self.active_campaign = new_campaign
