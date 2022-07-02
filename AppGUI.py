@@ -1,17 +1,17 @@
 import tkinter as ttk
 import Settings
 import Adventure
-import Database
 from PIL import ImageTk, Image
 
 
 class MainWindow(ttk.Tk):
-    def __init__(self):
-        super(MainWindow, self).__init__()
+    def __init__(self, database):
+        super().__init__()
         self.geometry("666x420+400+150")
         self.title("DI (Dungeon Initiative)")
         self.iconbitmap('Images/Icon.ico')
         self.resizable(False, False)
+        self.database = database
 
         self.main_image = ImageTk.PhotoImage(Image.open("Images/Main.jpg"))
         self.main_label = ttk.Label(image=self.main_image)
@@ -24,21 +24,7 @@ class MainWindow(ttk.Tk):
         self.tavern_button = ttk.Button(text="Tavern", command=self.launch_settings_window)
         self.tavern_button.place(x=520, y=370, width=95)
 
-        try:
-            self.current_campaign = Database.get_data("current_campaign")
-        except FileNotFoundError:
-            self.current_campaign = False
-
-        if not self.current_campaign:
-            self.campaign_button["state"] = "disabled"
-            self.tavern_button.focus_set()
-        else:
-            self.campaign_button["state"] = "normal"
-            self.campaign_button.focus_set()
-
-        """ DEV ACCESS BUTTON """
-        # self.test_button = ttk.Button(text="Developer", command=self.test_button)
-        # self.test_button.place(x=560, y=15, width=95)
+        self.check_for_current_campaign()
 
     def launch_campaign_window(self):
         global campaign_window
@@ -59,3 +45,14 @@ class MainWindow(ttk.Tk):
                 tavern_window = Settings.Tavern(self.winfo_x(), self.winfo_y())
         except NameError:
             tavern_window = Settings.Tavern(self.winfo_x(), self.winfo_y())
+
+    def check_for_current_campaign(self):
+        self.database.current_campaign = self.database.get_campaign_data()
+
+        if not self.database.current_campaign:
+            self.campaign_button["state"] = "disabled"
+            self.tavern_button.focus_set()
+        else:
+            self.campaign_button["state"] = "normal"
+            self.campaign_button.focus_set()
+
