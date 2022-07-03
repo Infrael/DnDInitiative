@@ -24,7 +24,7 @@ class MainWindow(ttk.Tk):
         self.tavern_button = ttk.Button(text="Tavern", command=self.launch_settings_window)
         self.tavern_button.place(x=520, y=370, width=95)
 
-        self.check_for_current_campaign()
+        self.check_for_active_campaign()
 
     def launch_campaign_window(self):
         global campaign_window
@@ -32,9 +32,11 @@ class MainWindow(ttk.Tk):
             if campaign_window.winfo_exists() == 1:
                 campaign_window.focus_set()
             else:
-                campaign_window = Adventure.Campaign(self.winfo_x(), self.winfo_y())
+                campaign_window = Adventure.Campaign(self.database.current_campaign)
+                self.iconify()
         except NameError:
-            campaign_window = Adventure.Campaign(self.winfo_x(), self.winfo_y())
+            campaign_window = Adventure.Campaign(self.database.current_campaign)
+            self.iconify()
 
     def launch_settings_window(self):
         global tavern_window
@@ -42,12 +44,14 @@ class MainWindow(ttk.Tk):
             if tavern_window.winfo_exists() == 1:
                 tavern_window.focus_set()
             else:
-                tavern_window = Settings.Tavern(self.winfo_x(), self.winfo_y())
+                tavern_window = Settings.Tavern()
+                self.iconify()
         except NameError:
-            tavern_window = Settings.Tavern(self.winfo_x(), self.winfo_y())
+            tavern_window = Settings.Tavern()
+            self.iconify()
 
-    def check_for_current_campaign(self):
-        self.database.current_campaign = self.database.get_campaign_data()
+    def check_for_active_campaign(self):
+        self.database.update_current_campaign()
 
         if not self.database.current_campaign:
             self.campaign_button["state"] = "disabled"

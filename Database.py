@@ -13,20 +13,19 @@ class Storage:
         self.file_location = self.main_settings["file_location"]
         self.current_campaign = False
 
-    def get_campaign_data(self):
+    def save_current_campaign(self):
+        with open(f"{self.file_location}/current_campaign.pickle", "wb") as handle:
+            pickle.dump(self.current_campaign, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+    def update_current_campaign(self, file_name="current_campaign"):
+        self.current_campaign = self.get_current_campaign_data(file_name)
+
+    def get_current_campaign_data(self, file_name):
         try:
-            with open(f"{self.file_location}/current_campaign.pickle", "rb") as handle:
+            with open(f"{self.file_location}/{file_name}.pickle", "rb") as handle:
                 loaded_data = pickle.load(handle)
             return loaded_data
         except FileNotFoundError:
-            return False
-
-    def correct_format_check(self, path):
-        name, extension = os.path.splitext(path)
-        if extension == ".pickle":
-            self.update_database_directory(name)
-            return True
-        else:
             return False
 
     def update_database_directory(self, path):
@@ -36,10 +35,23 @@ class Storage:
         with open('settings.ini', 'w') as updates:
             self.config_obj.write(updates)
 
+    def correct_format_check(self, path):
+        name, extension = os.path.splitext(path)
+        if extension == ".pickle":
+            self.update_database_directory(name)
+            return True
+        else:
+            return False
+
+    # CampaignDTO
+
     class CampaignDTO(TypedDict):
         campaign: str
-        heroes: dict
+        heroes: list
+        quests: list
+        notes: str
 
     def store_campaign_dto(self, data):
         with open(f"{self.file_location}/{data.get('campaign')}.pickle", "wb") as handle:
             pickle.dump(data, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
