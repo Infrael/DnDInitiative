@@ -1,5 +1,6 @@
 import os
 import pickle
+from Characters import Hero
 from configparser import ConfigParser
 from typing import TypedDict
 
@@ -14,6 +15,9 @@ class Storage:
         self.current_campaign = False
 
     def save_current_campaign(self):
+        with open(f"{self.file_location}/{self.current_campaign.get('campaign')}.pickle", "wb") as handle:
+            pickle.dump(self.current_campaign, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
         with open(f"{self.file_location}/current_campaign.pickle", "wb") as handle:
             pickle.dump(self.current_campaign, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
@@ -47,8 +51,8 @@ class Storage:
 
     class CampaignDTO(TypedDict):
         campaign: str
-        heroes: list
-        quests: list
+        heroes: list[Hero]
+        quests: list[tuple]
         notes: str
 
     def store_campaign_dto(self, data):

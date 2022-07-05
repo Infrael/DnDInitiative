@@ -1,10 +1,10 @@
-import tkinter as ttk
+import tkinter as tk
 import Settings
 import Adventure
 from PIL import ImageTk, Image
 
 
-class MainWindow(ttk.Tk):
+class MainWindow(tk.Tk):
     def __init__(self, database):
         super().__init__()
         self.geometry("666x420+400+150")
@@ -14,14 +14,14 @@ class MainWindow(ttk.Tk):
         self.database = database
 
         self.main_image = ImageTk.PhotoImage(Image.open("Images/Main.jpg"))
-        self.main_label = ttk.Label(image=self.main_image)
+        self.main_label = tk.Label(image=self.main_image)
         self.main_label.place(relwidth=1, relheight=1)
 
         """ Main App Buttons """
-        self.campaign_button = ttk.Button(text="Campaign", command=self.launch_campaign_window)
+        self.campaign_button = tk.Button(text="Campaign", command=self.launch_campaign_window)
         self.campaign_button.place(x=520, y=340, width=95)
 
-        self.tavern_button = ttk.Button(text="Tavern", command=self.launch_settings_window)
+        self.tavern_button = tk.Button(text="Tavern", command=self.launch_settings_window)
         self.tavern_button.place(x=520, y=370, width=95)
 
         self.check_for_active_campaign()
@@ -32,10 +32,10 @@ class MainWindow(ttk.Tk):
             if campaign_window.winfo_exists() == 1:
                 campaign_window.focus_set()
             else:
-                campaign_window = Adventure.Campaign(self.database.current_campaign)
+                campaign_window = Adventure.Campaign()
                 self.iconify()
         except NameError:
-            campaign_window = Adventure.Campaign(self.database.current_campaign)
+            campaign_window = Adventure.Campaign()
             self.iconify()
 
     def launch_settings_window(self):
