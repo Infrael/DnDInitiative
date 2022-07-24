@@ -59,3 +59,16 @@ class Storage:
         with open(f"{self.file_location}/{data.get('campaign')}.pickle", "wb") as handle:
             pickle.dump(data, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
+    def get_quest_index(self, *args):
+        return self.current_campaign["quests"].index(args)
+
+    def manage_quest_list(self, *args):
+        name, quest_type, notes, amendment_index = args
+        if quest_type == "Completed":
+            del self.current_campaign["quests"][amendment_index]
+        elif amendment_index >= 0:
+            self.current_campaign["quests"][amendment_index] = (name, quest_type, notes)
+        else:
+            self.current_campaign["quests"].append((name, quest_type, notes))
+
+        self.save_current_campaign()

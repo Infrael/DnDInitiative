@@ -1,13 +1,15 @@
-from AppGUI import tk
+import tkinter as tk
 from tkinter.filedialog import askopenfilename
 from PIL import ImageTk, Image
 from pathlib import Path
-import PartyCreator
+from PartyManager import PartyMember
 
 
 class Tavern(tk.Toplevel):
     def __init__(self):
         super().__init__()
+        self.database = self.master.database
+
         self.geometry(f"420x665+{self.master.winfo_x()}+{self.master.winfo_y()}")
         self.title("Delicious Goblin")
         self.iconbitmap('Images/Icon.ico')
@@ -69,9 +71,9 @@ class Tavern(tk.Toplevel):
     def browse_for_file(self):
         file_location = askopenfilename()
         if file_location:
-            if self.master.database.correct_format_check(file_location):
-                self.master.database.update_current_campaign(file_name=Path(file_location).stem)
-                self.master.database.save_current_campaign()
+            if self.database.correct_format_check(file_location):
+                self.database.update_current_campaign(file_name=Path(file_location).stem)
+                self.database.save_current_campaign()
             else:
                 tk.messagebox.showerror("Incorrect File Format", "Your Data is stored in .pickle files.\n"
                                                                  "Please select a correct file", parent=self)
@@ -81,9 +83,9 @@ class Tavern(tk.Toplevel):
             self.focus_set()
 
     def update_campaign_status(self):
-        if self.master.database.current_campaign:
+        if self.database.current_campaign:
             self.campaign_status_label.config(bg="green")
-            self.campaign_status.set(f"{self.master.database.current_campaign.get('campaign')} Campaign Active")
+            self.campaign_status.set(f"{self.database.current_campaign.get('campaign')} Campaign Active")
         else:
             self.campaign_status_label.config(bg="#4A7A8C")
             self.campaign_status.set("NO Active Campaign")
@@ -94,9 +96,9 @@ class Tavern(tk.Toplevel):
             if add_hero_window.winfo_exists() == 1:
                 add_hero_window.focus_set()
             else:
-                add_hero_window = PartyCreator.Character(self, number)
+                add_hero_window = PartyMember(self, number)
         except NameError:
-            add_hero_window = PartyCreator.Character(self, number)
+            add_hero_window = PartyMember(self, number)
 
     def add_hero_picture(self, chair_number, image_location):
         match chair_number:
@@ -159,11 +161,11 @@ class Tavern(tk.Toplevel):
         else:
             campaign_name = tk.simpledialog.askstring("Chapter I", "Please enter a name for your Campaign:")
             if campaign_name:
-                new_game = self.master.database.CampaignDTO(campaign=campaign_name, heroes=self.hero_list,
-                                                            quests=[], notes="")
-                self.master.database.store_campaign_dto(new_game)
-                self.master.database.update_current_campaign(new_game.get('campaign'))
-                self.master.database.save_current_campaign()
+                new_game = self.database.CampaignDTO(campaign=campaign_name, heroes=self.hero_list,
+                                                     quests=[], notes="")
+                self.database.store_campaign_dto(new_game)
+                self.database.update_current_campaign(new_game.get('campaign'))
+                self.database.save_current_campaign()
                 self.destroy()
                 self.master.launch_campaign_window()
 

@@ -1,10 +1,10 @@
-from AppGUI import tk
+import tkinter as tk
 from tkinter.filedialog import askopenfilename
 from PIL import ImageTk, Image
 from Characters import Hero
 
 
-class Character(tk.Toplevel):
+class PartyMember(tk.Toplevel):
     def __init__(self, tavern, chair_number):
         super().__init__(tavern)
         self.tavern = tavern
