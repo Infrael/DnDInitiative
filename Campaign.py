@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk, END
 from random import randint
 from PIL import ImageTk, Image
+from BattleSettings import BattleConfiguration
 
 
 class Campaign(tk.Toplevel):
@@ -90,7 +91,16 @@ class Campaign(tk.Toplevel):
             self.quest_tree.insert("", index=tk.END, values=quest)
 
     def initiate_combat(self):
-        pass
+        global encounter_window
+        try:
+            if encounter_window.winfo_exists() == 1:
+                encounter_window.focus_set()
+            else:
+                encounter_window = BattleConfiguration(self)
+                self.iconify()
+        except NameError:
+            encounter_window = BattleConfiguration(self)
+            self.iconify()
 
     def roll_d20(self):
         self.dice_roll.set(randint(1, 20))
